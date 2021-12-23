@@ -1,12 +1,20 @@
 import numpy as np
 
 
-# arr = np.asarray([[1, 2, 3], [2,3,4]], dtype=np.float16)
+# ------------
+# noteworthy
+# ------------
 #
-# arr[np.where(arr == 1)] = np.NaN
-# arr[np.where(arr == 2)] = np.NaN
-# arr[np.where(arr == 3)] = np.NaN
-
+# to prevent throwing off the later indices, when removing multiple indices from a list, use
+#   for index in sorted(indices, reverse=True)
+#     del list[index]
+#
+# np.nansum(array) => to find total sum ignoring nans
+#
+# np.isnan(array).all() => to find if all elements in an array are nans
+#
+# array[np.where(array == number)] = np.NaN => to set all items equal to 'number' as NaN
+#
 
 def read_input(filename):
     boards = []
@@ -47,11 +55,20 @@ def mark_board(board, number):
 
 def score(numbers, boards):
     for number in numbers:
-        for board in boards:
+        board_indexes_to_delete = []
+        for i, board in enumerate(boards):
             board = mark_board(board, number)
             if is_any_row_match(board) or is_any_column_match(board):
-                remaining_sum = np.nansum(board)
-                return remaining_sum * number
+                if len(boards) == 1:
+                    remaining_sum = np.nansum(board)
+                    return remaining_sum * number
+                else:
+                    board_indexes_to_delete.append(i)
+
+        # clear boards
+        for i in sorted(board_indexes_to_delete, reverse=True):
+            del boards[i]
 
 numbers, boards = read_input('long_input.txt')
 print(int(score(numbers, boards)))
+

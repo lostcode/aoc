@@ -1,9 +1,9 @@
 import numpy as np
 
 #
-# ----------------
-# salient features
-# ----------------
+# -----------
+# noteworthy
+# -----------
 #
 # np.asarray(...) to convert from a list of lists to a 2D array
 #
